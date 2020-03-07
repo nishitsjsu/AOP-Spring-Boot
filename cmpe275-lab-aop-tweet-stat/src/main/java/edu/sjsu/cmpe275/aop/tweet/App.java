@@ -15,7 +15,7 @@ public class App {
 
         try {
             tweeter.follow("bob", "alex");
-            tweeter.tweet("alex", "first tweet");
+            tweeter.tweet("alex", "First Tweet");
             tweeter.block("alex", "bob");
             tweeter.tweet("alex", "second tweet");
 

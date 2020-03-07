@@ -10,8 +10,9 @@ public interface TweetService {
 	 *                                  as measured by string length, or any
 	 *                                  parameter is null or empty.
 	 * @throws IOException              if there is a network failure.
+	 * @return
 	 */
-	void tweet(String user, String message) throws IllegalArgumentException, IOException;
+	int tweet(String user, String message) throws IllegalArgumentException, IOException;
 
 	/**
 	 * If Alice follows Bob, and Bob is not currently blocking Alice, any future
