@@ -21,7 +21,7 @@ public class StatsAspect {
 	
 	@After("execution(public * edu.sjsu.cmpe275.aop.tweet.TweetService.*(..))")
 	public void dummyAfterAdvice(JoinPoint joinPoint) {
-		System.out.printf("After the executuion of the metohd %s\n", joinPoint.getSignature().getName());
+		System.out.printf("After the executuion of the metohd follow %s\n", joinPoint.getSignature().getName());
 		//stats.resetStats();
 	}
 	
