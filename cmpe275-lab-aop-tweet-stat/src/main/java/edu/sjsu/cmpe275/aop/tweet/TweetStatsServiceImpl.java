@@ -143,6 +143,37 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 		//	System.out.println("-------- Update Follow History -------------");
 	}
 
+	/**
+	 * Method to log Block History
+	 *
+	 * @param user the user which follows other user
+	 * @param followee the user which is being followed by other user
+	 */
+	public void logBlockHistory(String user, String followee) {
+
+		//Keep track of who all has blocked
+		//Update Block History Map
+		//To keep track of user block history if A blocks B this map has list who all has blocked B
+		HashSet<String> set = new HashSet<String>();
+		if (BlockHistoryMap.containsKey(followee)) set = BlockHistoryMap.get(followee);
+		set.add(user);
+		BlockHistoryMap.put(followee, set);
+		//System.out.println("-------- Update Block History for followee -------------");
+
+
+
+		//To keep track of user block history if A blocks B this map has list who all  A has blocked
+		HashSet<String> blockedset = new HashSet<String>();
+		if (BlockHistoryMapByUser.containsKey(user))
+			blockedset = BlockHistoryMapByUser.get(user);
+		blockedset.add(followee);
+		BlockHistoryMapByUser.put(user, blockedset);
+		//System.out.println("-------- Update Block History By User-------------");
+		//System.out.println("Block By UserMap is" + BlockHistoryMapByUser.toString());
+		//System.out.println("Block Map is" + BlockHistoryMap.toString());
+
+	}
+
 
 
 }

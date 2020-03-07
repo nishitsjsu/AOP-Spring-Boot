@@ -7,7 +7,6 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.aspectj.lang.annotation.AfterReturning;
-
 import edu.sjsu.cmpe275.aop.tweet.TweetStatsServiceImpl;
 
 @Aspect
@@ -20,16 +19,16 @@ public class StatsAspect {
 
 	@Autowired TweetStatsServiceImpl stats;
 	
-	@After("execution(public * edu.sjsu.cmpe275.aop.tweet.TweetService.*(..))")
-	public void dummyAfterAdvice(JoinPoint joinPoint) {
-		System.out.printf("After the executuion of the metohd follow %s\n", joinPoint.getSignature().getName());
-		//stats.resetStats();
-	}
+//	@After("execution(public * edu.sjsu.cmpe275.aop.tweet.TweetService.*(..))")
+//	public void dummyAfterAdvice(JoinPoint joinPoint) {
+//		System.out.printf("After the executuion of the metohd follow %s\n", joinPoint.getSignature().getName());
+//		//stats.resetStats();
+//	}
 	
-	@Before("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.follow(..))")
-	public void dummyBeforeAdvice(JoinPoint joinPoint) {
-		System.out.printf("Before the executuion of the metohd %s\n", joinPoint.getSignature().getName());
-	}
+//	@Before("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.follow(..))")
+//	public void dummyBeforeAdvice(JoinPoint joinPoint) {
+//		System.out.printf("Before the executuion of the metohd %s\n", joinPoint.getSignature().getName());
+//	}
 
 
 	// --------------------------------      Tweet Module --------------------------------------------------
@@ -81,6 +80,33 @@ public class StatsAspect {
 	public void AfterFollow(JoinPoint joinPoint) {
 		stats.logfollowHistory(joinPoint.getArgs()[0].toString(), joinPoint.getArgs()[1].toString());
 		System.out.println(joinPoint.getArgs()[0].toString() + " following " + joinPoint.getArgs()[1].toString() + " is logged ------------");
+	}
+
+	// -------------------------------------------    Block Module    ------------------------------------------------
+	//Check if the params are valid and they are not null
+	@Before("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.block(..))")
+	public void validateBlockParams(JoinPoint joinPoint) {
+
+		//System.out.printf("Before the execution of the metohd %s\n", joinPoint.getSignature().getName());
+
+		String user = (String) joinPoint.getArgs()[0];
+		String followee = (String) joinPoint.getArgs()[1];
+		//System.out.println(joinPoint.getArgs()[0].toString().equals(joinPoint.getArgs()[1].toString()));
+
+		if(user == null || followee == null || followee.equals(user) ||  user.equals("") || followee.equals(""))
+			throw new IllegalArgumentException("Invalid parameters or user tried to  block himself");
+	}
+
+
+	/**
+	 * Method After uses After aspect to check if follow operation has finished and update the tweet stats accordingly
+	 *
+	 * @param joinPoint
+	 */
+	@AfterReturning("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.block(..))")
+	public void AfterBlock(JoinPoint joinPoint) {
+		stats.logBlockHistory(joinPoint.getArgs()[0].toString(), joinPoint.getArgs()[1].toString());
+		System.out.println(joinPoint.getArgs()[0].toString() + " blocking " + joinPoint.getArgs()[1].toString() + " is logged");
 	}
 
 
