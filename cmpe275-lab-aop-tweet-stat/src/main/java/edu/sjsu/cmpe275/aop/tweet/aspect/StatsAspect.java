@@ -111,7 +111,7 @@ public class StatsAspect {
 	}
 
 
-	// -------------------------------------------    Block Module    ------------------------------------------------
+	// -------------------------------------------    Unblock Module    ------------------------------------------------
 	//Check if the params are valid and they are not null
 	@Before("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.unblock(..))")
 	public void validateUnBlockParams(JoinPoint joinPoint) {

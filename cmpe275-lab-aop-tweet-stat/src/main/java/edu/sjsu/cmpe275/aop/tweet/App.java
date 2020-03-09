@@ -14,21 +14,38 @@ public class App {
         TweetStatsService stats = (TweetStatsService) ctx.getBean("tweetStatsService");
 
         try {
-            tweeter.follow("bob", "alex");
-            tweeter.follow("Adi", "alex");
-            tweeter.follow("Joe", "alex");
-            tweeter.tweet("alex", "First Tweet");
+//            tweeter.follow("bob", "alex");
+//            tweeter.follow("Adi", "alex");
+//            tweeter.follow("bob", "Zhang");
+//
+//            tweeter.tweet("alex", "First Tweet");
+//
+//            tweeter.block("Carl", "bob");
+////            tweeter.block("alex", "bob");
+////            tweeter.block("Zhang", "bob");
+//            tweeter.tweet("alex", "second tweet");
+//            tweeter.follow("Joe", "alex");
+////            tweeter.block("Carl", "Adi");
+//            tweeter.tweet("alex", "Third tweet");
+////            tweeter.block("alex", "Adi");
+////            tweeter.unblock("alex", "Carl");
+//            tweeter.tweet("alex", "Forth tweet");
+//            tweeter.unblock("alex", "bob");
+//            tweeter.unblock("alex", "Adi");
+//            tweeter.unblock("Zhang", "bob");
+//            tweeter.tweet("alex", "Fifth tweet");
+////            tweeter.block("alex", "bob");
+////            tweeter.block("alex", "Adi");
+////            tweeter.tweet("bob", "second tweet");
 
-            tweeter.block("Carl", "bob");
-            tweeter.block("alex", "Carl");
+            tweeter.follow("bob", "alex");
+            tweeter.follow("carl", "alex");
+            tweeter.tweet("alex", "First Tweet");
             tweeter.block("alex", "bob");
+            tweeter.block("carl", "bob");
+            tweeter.block("alex", "carl");
             tweeter.tweet("alex", "second tweet");
-//            tweeter.block("alex", "Joe");
-            tweeter.tweet("alex", "Third tweet");
-            tweeter.tweet("alex", "Forth tweet");
-//            tweeter.block("alex", "bob");
-//            tweeter.block("alex", "Adi");
-//            tweeter.tweet("bob", "second tweet");
+            tweeter.tweet("bob", "second tweet");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,6 +56,7 @@ public class App {
         System.out.println("Length of the longest tweet: " + stats.getLengthOfLongestTweet());
         System.out.println("Most popular message: " + stats.getMostPopularMessage());
         System.out.println("Most blocked by missed tweets: " + stats.getMostBlockedFollowerByNumberOfMissedTweets());
+        System.out.println("Most blocked follower: " + stats.getMostBlockedFollowerByNumberOfFollowees());
         ctx.close();
     }
 }

@@ -30,7 +30,8 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 	//To keep track of missed tweets by a blocked user
 	private static TreeMap<String, Integer> BlockedUserMissedTweets = new TreeMap<String, Integer>();
 
-
+	//To keep track of most blocked follower
+	private static TreeMap<String, HashSet<String>> MostBlockedFollower = new TreeMap<String, HashSet<String>>();
 
 	@Override
 	public void resetStatsAndSystem() {
@@ -151,8 +152,26 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 	@Override
 	public String getMostBlockedFollowerByNumberOfFollowees() {
 		// TODO Auto-generated method stub
-
-		return null;
+		int ma =0;
+		HashSet<String> set = new HashSet<String>();
+		String out = "";
+		if (MostBlockedFollower.isEmpty()){
+			return null;
+		} else {
+//			out = MostBlockedFollower.firstKey();
+			for (Map.Entry<String, HashSet<String>> s : MostBlockedFollower.entrySet()) {
+				set = s.getValue();
+				if(set.size() > ma){
+					ma = set.size();
+					out = s.getKey();
+				}
+			}
+			if(out!=""){
+				return out;
+			} else{
+				return null;
+			}
+		}
 	}
 
 
@@ -192,6 +211,8 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 
 		System.out.println("------------------------");
 		System.out.println(messageSharedHistory.toString());
+		System.out.println("follow history" + followHistoryMap.toString());
+		System.out.println("Most blocked follower history" + MostBlockedFollower.toString());
 
 		//Update message Shared Map
 		//do not Share message to all blockers of given user
@@ -202,14 +223,18 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 			HashSet<String> blockedUsers = new HashSet<String>();
 			for(String s : BlockHistoryMapByUser.get(user)){
 				if( messageSharedHistory.get(messageId) != null && !messageSharedHistory.get(messageId).isEmpty()){
+
+					if(messageSharedHistory.get(messageId).contains(s)){
+						//incrementing missed tweets value
+						System.out.println("Adding missed tweet for " + s );
+						int val = BlockedUserMissedTweets.get(s);
+						val = val + 1;
+						BlockedUserMissedTweets.put(s,val);
+					}
 					System.out.println("Removing " + s + " from Users List" + messageSharedHistory.get(messageId));
 					messageSharedHistory.get(messageId).remove(s);
 
-					//incrementing missed tweets value
-					System.out.println("Adding missed tweet for " + s );
-					int val = BlockedUserMissedTweets.get(s);
-					val = val + 1;
-					BlockedUserMissedTweets.put(s,val);
+
 
 				}
 			}
@@ -265,7 +290,19 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 		//System.out.println("Block By UserMap is" + BlockHistoryMapByUser.toString());
 		//System.out.println("Block Map is" + BlockHistoryMap.toString());
 
-		//Code for blocked user missed tweets
+		//Code for most blocked follower
+		HashSet<String> setF = new HashSet<String>();
+		HashSet<String> setTemp = new HashSet<String>();
+		if (MostBlockedFollower.containsKey(followee)) {
+			setF = MostBlockedFollower.get(followee);
+		}
+		if (followHistoryMap.containsKey(user)){
+			setTemp = followHistoryMap.get(user);
+			if (setTemp.contains(followee)){
+				setF.add(user);
+			}
+		}
+		MostBlockedFollower.put(followee,setF);
 
 	}
 
@@ -289,6 +326,13 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 		//System.out.println("-------- Update Block History By User-------------");
 		//System.out.println("Block By UserMap is" + BlockHistoryMapByUser.toString());
 		//System.out.println("Block Map is" + BlockHistoryMap.toString());
+
+		//Removing from most blocked follower
+		HashSet<String> blockedsetfollower = new HashSet<String>();
+		if (MostBlockedFollower.containsKey(followee))
+			blockedsetfollower = MostBlockedFollower.get(followee);
+		blockedsetfollower.remove(user);
+		MostBlockedFollower.put(followee, blockedsetfollower);
 
 	}
 
