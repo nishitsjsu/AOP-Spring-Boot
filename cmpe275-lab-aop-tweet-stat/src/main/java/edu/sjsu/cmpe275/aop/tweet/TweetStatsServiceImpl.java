@@ -36,14 +36,21 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 	@Override
 	public void resetStatsAndSystem() {
 		// TODO Auto-generated method stub
-		
+		lengthOfLongestTweet = 0;
+		followHistoryMap = new TreeMap<String, HashSet<String>>();
+		BlockHistoryMap =  new TreeMap<String, HashSet<String>>();
+		messageMap = new HashMap<Integer, String>();
+		userMessageMap = new TreeMap<String, HashSet<Integer>>();
+		messageSharedHistory = new TreeMap<Integer, HashSet<String>>();
+		BlockHistoryMapByUser = new TreeMap<String, HashSet<String>>();
+		BlockedUserMissedTweets = new TreeMap<String, Integer>();
+		MostBlockedFollower = new TreeMap<String, HashSet<String>>();
 	}
     
 	@Override
 	public int getLengthOfLongestTweet() {
 		// TODO Auto-generated method stub
 		return lengthOfLongestTweet;
-//		return 0;
 	}
 
 	@Override

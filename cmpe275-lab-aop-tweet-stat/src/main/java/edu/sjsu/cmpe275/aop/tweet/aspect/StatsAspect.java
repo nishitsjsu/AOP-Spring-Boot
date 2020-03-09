@@ -1,5 +1,4 @@
 package edu.sjsu.cmpe275.aop.tweet.aspect;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,34 +17,8 @@ public class StatsAspect {
      */
 
 	@Autowired TweetStatsServiceImpl stats;
-	
-//	@After("execution(public * edu.sjsu.cmpe275.aop.tweet.TweetService.*(..))")
-//	public void dummyAfterAdvice(JoinPoint joinPoint) {
-//		System.out.printf("After the executuion of the metohd follow %s\n", joinPoint.getSignature().getName());
-//		//stats.resetStats();
-//	}
-	
-//	@Before("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.follow(..))")
-//	public void dummyBeforeAdvice(JoinPoint joinPoint) {
-//		System.out.printf("Before the executuion of the metohd %s\n", joinPoint.getSignature().getName());
-//	}
-
 
 	// --------------------------------      Tweet Module --------------------------------------------------
-
-	@Before("execution(public int edu.sjsu.cmpe275.aop.tweet.TweetService.tweet(..))")
-	public void validateMessageLengthBeforeTweet(JoinPoint joinPoint) {
-
-
-
-		System.out.printf("Before the execution of the metohd %s\n", joinPoint.getSignature().getName());
-
-		String user = (String) joinPoint.getArgs()[0];
-		String message = (String) joinPoint.getArgs()[1];
-		if(user == null || message == null || message.length() > 140 || user.equals("") || message.equals("")){
-			throw new IllegalArgumentException("Invalid parameters used either message or user is null or message length is more than 140"); }
-
-	}
 
 	@AfterReturning(
 			pointcut = "execution(* edu.sjsu.cmpe275.aop.tweet.TweetService.tweet(..))",
@@ -57,19 +30,6 @@ public class StatsAspect {
 
 
 	// -------------------------------------------    Follow Module    ------------------------------------------------
-	//Check if the params are valid and they are not null
-	@Before("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.follow(..))")
-	public void validateFollowParams(JoinPoint joinPoint) {
-
-		System.out.printf("Before the execution of the metohd %s\n", joinPoint.getSignature().getName());
-
-		String follower = (String) joinPoint.getArgs()[0];
-		String followee = (String) joinPoint.getArgs()[1];
-
-		if(followee == null || follower == null || followee.equals(follower) || followee.equals("") || follower.equals(""))
-			throw new IllegalArgumentException("Invalid parameters or user tried to follow himself");
-	}
-
 
 	/**
 	 * Method After uses After aspect to check if follow operation has finished and update the tweet stats accordingly
@@ -83,21 +43,6 @@ public class StatsAspect {
 	}
 
 	// -------------------------------------------    Block Module    ------------------------------------------------
-	//Check if the params are valid and they are not null
-	@Before("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.block(..))")
-	public void validateBlockParams(JoinPoint joinPoint) {
-
-		//System.out.printf("Before the execution of the metohd %s\n", joinPoint.getSignature().getName());
-
-		String user = (String) joinPoint.getArgs()[0];
-		String followee = (String) joinPoint.getArgs()[1];
-		//System.out.println(joinPoint.getArgs()[0].toString().equals(joinPoint.getArgs()[1].toString()));
-
-		if(user == null || followee == null || followee.equals(user) ||  user.equals("") || followee.equals(""))
-			throw new IllegalArgumentException("Invalid parameters or user tried to  block himself");
-
-	}
-
 
 	/**
 	 * Method After uses After aspect to check if follow operation has finished and update the tweet stats accordingly
@@ -112,20 +57,6 @@ public class StatsAspect {
 
 
 	// -------------------------------------------    Unblock Module    ------------------------------------------------
-	//Check if the params are valid and they are not null
-	@Before("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.unblock(..))")
-	public void validateUnBlockParams(JoinPoint joinPoint) {
-
-		//System.out.printf("Before the execution of the metohd %s\n", joinPoint.getSignature().getName());
-
-		String user = (String) joinPoint.getArgs()[0];
-		String followee = (String) joinPoint.getArgs()[1];
-		//System.out.println(joinPoint.getArgs()[0].toString().equals(joinPoint.getArgs()[1].toString()));
-
-		if(user == null || followee == null || followee.equals(user) ||  user.equals("") || followee.equals(""))
-			throw new IllegalArgumentException("Invalid parameters or user tried to  block himself");
-
-	}
 
 
 	/**
