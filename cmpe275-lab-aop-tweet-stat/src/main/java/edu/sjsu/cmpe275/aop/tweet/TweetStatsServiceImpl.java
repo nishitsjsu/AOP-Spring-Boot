@@ -12,7 +12,7 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 	//keep track of user message map
 	private static TreeMap<String, HashSet<Integer>> userMessageMap = new TreeMap<String, HashSet<Integer>>();
 
-	//keep track of messages added
+	//keep track of messages
 	private static HashMap<Integer, String> messageMap = new HashMap<Integer, String>();
 
 	//To keep track of message shared history
@@ -21,7 +21,7 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 	//To keep track of user follow history
 	private static TreeMap<String, HashSet<String>> followHistoryMap = new TreeMap<String, HashSet<String>>();
 
-	//To keep track of user block history if A blocks B this map has list who all has blocked B
+	//To keep track of user block history if A blocks B then this map has list of all who has blocked B
 	private static TreeMap<String, HashSet<String>> BlockHistoryMap = new TreeMap<String, HashSet<String>>();
 
 	//To keep track of user block history if A blocks B this map has list who all  A has blocked
@@ -37,14 +37,14 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 	public void resetStatsAndSystem() {
 		// TODO Auto-generated method stub
 		lengthOfLongestTweet = 0;
-		followHistoryMap = new TreeMap<String, HashSet<String>>();
 		BlockHistoryMap =  new TreeMap<String, HashSet<String>>();
-		messageMap = new HashMap<Integer, String>();
 		userMessageMap = new TreeMap<String, HashSet<Integer>>();
 		messageSharedHistory = new TreeMap<Integer, HashSet<String>>();
-		BlockHistoryMapByUser = new TreeMap<String, HashSet<String>>();
 		BlockedUserMissedTweets = new TreeMap<String, Integer>();
+		followHistoryMap = new TreeMap<String, HashSet<String>>();
 		MostBlockedFollower = new TreeMap<String, HashSet<String>>();
+		messageMap = new HashMap<Integer, String>();
+		BlockHistoryMapByUser = new TreeMap<String, HashSet<String>>();
 	}
     
 	@Override
@@ -67,9 +67,7 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 			}
 			System.out.println(key + " => " + entry.getValue().toString());
 		}
-
 		return productiveUser;
-//		return null;
 	}
 
 	@Override
@@ -101,9 +99,7 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 				break;
 			}
 		}
-
 		return  popularMessage;
-//		return null;
 	}
 	
 	@Override
@@ -120,8 +116,6 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 				messageLength += messageMap.get(i).length();
 			}
 			messageLengthMap.put(entry.getKey(), messageLength);
-			//System.out.println("-------- User Message Map ---------");
-			//System.out.println("Key" + entry.getKey() + "Value is" + entry.getValue().toString());
 		}
 
 		for(Map.Entry<String, Integer> entry : messageLengthMap.entrySet()) {
@@ -129,12 +123,8 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 				maxMessageValue = entry.getValue();
 				productiveUser = entry.getKey();
 			}
-			//	System.out.println("-------- Modified Message Map ---------");
-			//	System.out.println("Key" + entry.getKey() + "Value is" + entry.getValue().toString());
 		}
-
 		return productiveUser;
-//		return null;
 	}
 
 	@Override
@@ -206,7 +196,6 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 		userMessageMap.put(user, messageIdList);
 		messageMap.put(messageId, message);
 
-		//Update message Shared Map
 		//Share message to all followers of given user
 		if(!followHistoryMap.isEmpty() && followHistoryMap.containsKey(user)) {
 			HashSet<String> sharedUsers = new HashSet<String>();
@@ -216,16 +205,15 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 			}
 		}
 
-		System.out.println("------------------------");
-		System.out.println(messageSharedHistory.toString());
-		System.out.println("follow history" + followHistoryMap.toString());
-		System.out.println("Most blocked follower history" + MostBlockedFollower.toString());
+//		System.out.println(messageSharedHistory.toString());
 
-		//Update message Shared Map
 		//do not Share message to all blockers of given user
 		System.out.println("Blocked User Map History" + BlockHistoryMapByUser.toString());
 		System.out.println("Blocked Map History" + BlockHistoryMap.toString());
 		System.out.println("Blocked User Missed tweets" + BlockedUserMissedTweets.toString());
+		System.out.println("follow history" + followHistoryMap.toString());
+		System.out.println("Most blocked follower history" + MostBlockedFollower.toString());
+
 		if(!BlockHistoryMapByUser.isEmpty() &&  BlockHistoryMapByUser.get(user) != null && !BlockHistoryMapByUser.get(user).isEmpty()) {
 			HashSet<String> blockedUsers = new HashSet<String>();
 			for(String s : BlockHistoryMapByUser.get(user)){
@@ -241,13 +229,10 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 					System.out.println("Removing " + s + " from Users List" + messageSharedHistory.get(messageId));
 					messageSharedHistory.get(messageId).remove(s);
 
-
-
 				}
 			}
 		}
 
-		//System.out.println(messageSharedHistory.toString());
 	}
 
 	/**
@@ -269,13 +254,9 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 	/**
 	 * Method to log Block History
 	 *
-	 * @param user the user which follows other user
-	 * @param followee the user which is being followed by other user
 	 */
 	public void logBlockHistory(String user, String followee) {
 
-		//Keep track of who all has blocked
-		//Update Block History Map
 		//To keep track of user block history if A blocks B this map has list who all has blocked B
 		HashSet<String> set = new HashSet<String>();
 		if (BlockHistoryMap.containsKey(followee)) {
@@ -285,7 +266,6 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 		}
 		set.add(user);
 		BlockHistoryMap.put(followee, set);
-		//System.out.println("-------- Update Block History for followee -------------");
 
 		//To keep track of user block history if A blocks B this map has list who all  A has blocked
 		HashSet<String> blockedset = new HashSet<String>();
@@ -293,11 +273,8 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 			blockedset = BlockHistoryMapByUser.get(user);
 		blockedset.add(followee);
 		BlockHistoryMapByUser.put(user, blockedset);
-		//System.out.println("-------- Update Block History By User-------------");
-		//System.out.println("Block By UserMap is" + BlockHistoryMapByUser.toString());
-		//System.out.println("Block Map is" + BlockHistoryMap.toString());
 
-		//Code for most blocked follower
+		//To keep track of most blocked follower
 		HashSet<String> setF = new HashSet<String>();
 		HashSet<String> setTemp = new HashSet<String>();
 		if (MostBlockedFollower.containsKey(followee)) {
@@ -315,24 +292,16 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 
 	public void logUnBlockHistory(String user, String followee) {
 
-		//Keep track of who all has blocked
-		//Update Block History Map
-		//To keep track of user block history if A blocks B this map has list who all has blocked B
 		HashSet<String> set = new HashSet<String>();
 		if (BlockHistoryMap.containsKey(followee)) set = BlockHistoryMap.get(followee);
 		set.remove(user);
 		BlockHistoryMap.put(followee, set);
-		//System.out.println("-------- Update Block History for followee -------------");
 
-		//To keep track of user block history if A blocks B this map has list who all  A has blocked
 		HashSet<String> blockedset = new HashSet<String>();
 		if (BlockHistoryMapByUser.containsKey(user))
 			blockedset = BlockHistoryMapByUser.get(user);
 		blockedset.remove(followee);
 		BlockHistoryMapByUser.put(user, blockedset);
-		//System.out.println("-------- Update Block History By User-------------");
-		//System.out.println("Block By UserMap is" + BlockHistoryMapByUser.toString());
-		//System.out.println("Block Map is" + BlockHistoryMap.toString());
 
 		//Removing from most blocked follower
 		HashSet<String> blockedsetfollower = new HashSet<String>();
@@ -340,7 +309,6 @@ public class TweetStatsServiceImpl implements TweetStatsService {
 			blockedsetfollower = MostBlockedFollower.get(followee);
 		blockedsetfollower.remove(user);
 		MostBlockedFollower.put(followee, blockedsetfollower);
-
 	}
 
 }

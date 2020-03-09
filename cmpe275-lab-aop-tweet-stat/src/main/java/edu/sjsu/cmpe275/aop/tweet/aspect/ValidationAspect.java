@@ -13,11 +13,6 @@ public class ValidationAspect {
      * You are expected to provide an actual implementation based on the requirements, including adding/removing advices as needed.
      */
 
-//	@Before("execution(public int edu.sjsu.cmpe275.aop.tweet.TweetService.retweet(..))")
-//	public void dummyBeforeAdvice(JoinPoint joinPoint) {
-//		System.out.printf("Permission check before the executuion of the metohd %s\n", joinPoint.getSignature().getName());
-//	}
-
 	@Before("execution(public int edu.sjsu.cmpe275.aop.tweet.TweetService.tweet(..))")
 	public void validateMessageLengthBeforeTweet(JoinPoint joinPoint) {
 		System.out.printf("Validate posted tweet before the execution of the metohd %s\n", joinPoint.getSignature().getName());

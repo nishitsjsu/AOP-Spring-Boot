@@ -18,7 +18,14 @@ public class StatsAspect {
 
 	@Autowired TweetStatsServiceImpl stats;
 
-	// --------------------------------      Tweet Module --------------------------------------------------
+	//Tweet Module
+
+
+	/**
+	 * Method After uses After aspect to check if follow operation has finished and update the tweet stats accordingly
+	 *
+	 * @param joinPoint
+	 */
 
 	@AfterReturning(
 			pointcut = "execution(* edu.sjsu.cmpe275.aop.tweet.TweetService.tweet(..))",
@@ -28,27 +35,16 @@ public class StatsAspect {
 		System.out.println("Tweet By " + joinPoint.getArgs()[0].toString() + " : " + joinPoint.getArgs()[1].toString() + " is logged");
 	}
 
+	//Follow Module
 
-	// -------------------------------------------    Follow Module    ------------------------------------------------
-
-	/**
-	 * Method After uses After aspect to check if follow operation has finished and update the tweet stats accordingly
-	 *
-	 * @param joinPoint
-	 */
 	@AfterReturning("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.follow(..))")
 	public void AfterFollow(JoinPoint joinPoint) {
 		stats.logfollowHistory(joinPoint.getArgs()[0].toString(), joinPoint.getArgs()[1].toString());
 		System.out.println(joinPoint.getArgs()[0].toString() + " following " + joinPoint.getArgs()[1].toString() + " is logged ------------");
 	}
 
-	// -------------------------------------------    Block Module    ------------------------------------------------
+	//Block Module
 
-	/**
-	 * Method After uses After aspect to check if follow operation has finished and update the tweet stats accordingly
-	 *
-	 * @param joinPoint
-	 */
 	@AfterReturning("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.block(..))")
 	public void AfterBlock(JoinPoint joinPoint) {
 		stats.logBlockHistory(joinPoint.getArgs()[0].toString(), joinPoint.getArgs()[1].toString());
@@ -56,14 +52,8 @@ public class StatsAspect {
 	}
 
 
-	// -------------------------------------------    Unblock Module    ------------------------------------------------
+	//Unblock Module
 
-
-	/**
-	 * Method After uses After aspect to check if follow operation has finished and update the tweet stats accordingly
-	 *
-	 * @param joinPoint
-	 */
 	@AfterReturning("execution(public void edu.sjsu.cmpe275.aop.tweet.TweetService.unblock(..))")
 	public void AfterUnBlock(JoinPoint joinPoint) {
 		stats.logUnBlockHistory(joinPoint.getArgs()[0].toString(), joinPoint.getArgs()[1].toString());

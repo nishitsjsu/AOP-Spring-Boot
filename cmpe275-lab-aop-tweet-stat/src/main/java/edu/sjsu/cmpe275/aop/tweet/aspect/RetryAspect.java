@@ -16,49 +16,34 @@ public class RetryAspect {
      * @throws Throwable 
      */
 
-//	@Around("execution(public int edu.sjsu.cmpe275.aop.tweet.TweetService.*tweet(..))")
-//	public int dummyAdviceOne(ProceedingJoinPoint joinPoint) throws Throwable {
-//		System.out.printf("Prior to the executuion of the metohd %s\n", joinPoint.getSignature().getName());
-//		Integer result = null;
-//		try {
-//			result = (Integer) joinPoint.proceed();
-//			System.out.printf("Finished the executuion of the metohd %s with result %s\n", joinPoint.getSignature().getName(), result);
-//		} catch (Throwable e) {
-//			e.printStackTrace();
-//			System.out.printf("Aborted the executuion of the metohd %s\n", joinPoint.getSignature().getName());
-//			throw e;
-//		}
-//		return result.intValue();
-//	}
-
 	@Around("execution(* edu.sjsu.cmpe275.aop.tweet.TweetService.*(..))")
 	public Object tweetAround(ProceedingJoinPoint joinPoint) throws Throwable {
 		System.out.printf("Around %s\n" , joinPoint.getSignature().getName());
 
-		Object i;
+		Object o;
 		try {
-			i = joinPoint.proceed();
+			o = joinPoint.proceed();
 
 		} catch (IOException e1) {
 			System.out.println("Trying to connect again: 1st attempt");
 			try {
-				i = joinPoint.proceed();
+				o = joinPoint.proceed();
 			} catch (IOException e2) {
 				System.out.println("Trying to connect again: 2nd attempt");
 				try {
-					i = joinPoint.proceed();
+					o = joinPoint.proceed();
 				} catch (IOException e3) {
 					System.out.println("Trying to connect again: 3nd attempt");
 					try {
-						i = joinPoint.proceed();
+						o = joinPoint.proceed();
 					} catch (IOException e4) {
-						System.out.println("Tweet failed permanently");
+						System.out.println("Couldn't make it in 3 attempts");
 						throw new IOException("Network Error has occured");
 					}
 				}
 			}
 		}
-		return i;
+		return o;
 	}
 
 }
