@@ -10,6 +10,7 @@ public interface TweetStatsService {
 	 */
 	void resetStatsAndSystem();
 
+
 	/**
 	 * @returns the length of longest message a user successfully sent since the
 	 *          beginning or last reset. If no messages were successfully tweeted,
